@@ -24,9 +24,9 @@ fi
 cp .tmux.conf ~/.tmux.conf
 tmux source-file ~/.tmux.conf
 echo "done preparing tmux"
-
 echo "installing tools.."
-if ! [-x $"command -v lazygit" ]; then
+
+if ! [ -x "$(command -v lazygit)" ]; then
   echo "installing lazygit..."
   if ! [ -x "$(command -v go)" ]; then
     echo "Go is not installed. Please install Go first."
@@ -40,6 +40,13 @@ else
   echo "lazygit already installed"
 fi
 
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install
+if ! [ -x "$(command -v fzf)" ]; then
+  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+  ~/.fzf/install
+fi
 echo "done installing tools"
+echo "configuring git..."
+git config merge.conflictstyle diff3
+git config merge.tool vimdiff
+git config mergetool.prompt false
+echo "done configuring git"
